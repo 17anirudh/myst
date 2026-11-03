@@ -1,98 +1,66 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Device from "expo-device";
+import { styled } from "nativewind";
+import { Pressable, Text } from "react-native";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
+import {
+	TabletIcon,
+	MonitorIcon,
+	TvIcon,
+	SunIcon as SI,
+	MoonIcon as MI,
+	type LucideProps,
+} from "lucide-react-native";
+import { useTheme } from "@/hooks/ThemeProvider";
+import { Link } from "expo-router";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+const SafeAreaView = styled(RNSafeAreaView);
+const SunIcon = styled(SI);
+const MoonIcon = styled(MI);
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+const iconMap: Record<Device.DeviceType, Styled<LucideProps>> = {
+	[Device.DeviceType.UNKNOWN]: styled(TabletIcon),
+	[Device.DeviceType.PHONE]: styled(TabletIcon),
+	[Device.DeviceType.TABLET]: styled(TabletIcon),
+	[Device.DeviceType.DESKTOP]: styled(MonitorIcon),
+	[Device.DeviceType.TV]: styled(TvIcon),
+};
 
 export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
+	const { currentTheme: pref, toggleTheme } = useTheme();
+	const Icon: Styled<LucideProps> =
+		iconMap[Device.deviceType ?? Device.DeviceType.UNKNOWN];
+	const item: string = `${Device.brand} ${Device.platformApiLevel}`;
+	return (
+		<SafeAreaView
+			edges={["top", "bottom", "left", "right"]}
+			className="flex flex-col w-full h-full justify-center items-center p-4 gap-10 will-change-variable"
+		>
+			<Icon className="text-foreground" size={120} />
+			<Text className="font-bold text-4xl text-center italic will-change-variable text-foreground">
+				User is using {item}
+			</Text>
+			<Text className="text-2xl text-center will-change-variable text-foreground">
+				User prefers {pref} theme
+			</Text>
+			<Pressable
+        onPress={toggleTheme}
+        className="p-3 rounded-full active:opacity-70"
+      >
+        {pref === "dark" ? (
+          <SunIcon size={24} className="text-foreground" />
+        ) : (
+          <MoonIcon size={24} className="text-foreground" />
+        )}
+      </Pressable>
+			<Link
+				href="/(landing)"
+				className="border border-foreground rounded-full p-6"
+			>
+				<Text className="text-xl text-center will-change-variable text-foreground p-2 uppercase">
+					Landing
+				</Text>
+			</Link>
+			{/*<ThemeToggler />*/}
+		</SafeAreaView>
+	);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
