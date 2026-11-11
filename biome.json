@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -15,7 +15,12 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"preset": "recommended"
+			"preset": "recommended",
+			"nursery": {
+        "noTailwindRestyledComponents": "error",
+        "noTailwindRawColors": "error",
+        "noTailwindArbitraryValue": "error"
+      }
 		}
 	},
 	"javascript": {
@@ -28,8 +33,13 @@
 			"tailwindDirectives": true
 		}
 	},
+	"tailwind": {
+    "stylesheet": "./src/global.css",
+    "mergeFunctions": ["cn"],
+    "variantFunctions": ["cn"],
+    "attributes": ["className"]
+  },
 	"assist": {
-		"enabled": true,
 		"actions": {
 			"source": {
 				"organizeImports": "on"
