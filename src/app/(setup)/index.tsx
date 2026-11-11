@@ -1,17 +1,22 @@
-import * as Device from "expo-device";
-import { styled } from "nativewind";
+import Wrapper from "@/components/wrapper";
+import { Link } from "expo-router";
 import { Text } from "react-native";
-import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-
-const SafeAreaView = styled(RNSafeAreaView);
 
 export default function SetupHome() {
 	return (
-		<SafeAreaView
-			edges={["top", "bottom", "left", "right"]}
-			className="flex-1 flex flex-col w-full h-full justify-center items-center p-4 border border-foreground"
-		>
-			<Text className="font-bold text-6xl text-center italic text-foreground">{`${Device.osName} ${Device.osVersion}`}</Text>
-		</SafeAreaView>
+		<Wrapper>
+			<Text className="text-5xl text-center text-foreground">
+			  Welcome to myst, this is a starter Expo SDK 58 configured with NativeWind v5
+			</Text>
+			<Link
+  			href="/(setup)/auth"
+  			push
+  			className="px-5 border border-foreground py-2 will-change-variable"
+      >
+       	<Text className="will-change-variable text-foreground p-2 uppercase">
+      		Login
+       	</Text>
+      </Link>
+		</Wrapper>
 	);
 }

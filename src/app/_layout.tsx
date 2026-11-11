@@ -7,6 +7,10 @@ import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "@/hooks/ThemeProvider";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
+import { styled } from "react-native-css";
+
+const SafeAreaView = styled(RNSafeAreaView);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,15 +31,13 @@ export default function InitialLayout() {
 	return (
 		<ThemeProvider>
 			<SafeAreaProvider>
-				<View className="flex-1 bg-background text-foreground font-display">
-					<StatusBar style="auto" animated />
-					<Stack
-						screenOptions={{
-							headerShown: false,
-							contentStyle: { backgroundColor: "transparent" },
-						}}
-					/>
-				</View>
+				<StatusBar style="auto" animated />
+				<Stack
+ 					screenOptions={{
+						headerShown: false,
+						contentStyle: { backgroundColor: "transparent" },
+ 					}}
+				/>
 			</SafeAreaProvider>
 		</ThemeProvider>
 	);

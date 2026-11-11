@@ -1,4 +1,3 @@
-import * as Device from "expo-device";
 import { styled } from "nativewind";
 import { Text } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
@@ -9,9 +8,9 @@ export default function LandingHome() {
 	return (
 		<SafeAreaView
 			edges={["top", "bottom", "left", "right"]}
-			className="flex-1 flex flex-col w-full h-full justify-center items-center p-4 border border-foreground"
+			className="flex flex-col w-full h-full justify-center items-center p-4 gap-10 will-change-variable"
 		>
-			<Text className="font-bold text-6xl text-center italic text-foreground">{`${Device.osName} ${Device.osVersion}`}</Text>
+			<Text className="font-bold text-6xl text-center italic text-foreground">app/(landing)/home</Text>
 		</SafeAreaView>
 	);
 }
